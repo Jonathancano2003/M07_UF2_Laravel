@@ -81,4 +81,14 @@ class FilmController extends Controller
         }
         return view("films.list", ["films" => $films_filtered, "title" => $title]);
     }
+    public function FilmsByYear($films_filtered ): array{
+        $films_filtered=[];
+
+        return $films_filtered;
+    }
+public function FilmsByGenre($films_filtered):array{
+    $films_filtered=[];
+    return $films_filtered;
+}
+    
 }
