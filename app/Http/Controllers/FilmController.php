@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+<<<<<<< HEAD
 use Illuminate\Contracts\View\View;
+=======
+>>>>>>> 40e166d2b8a87aeea9fb9d4a489979a5f9a86f81
 use Illuminate\Support\Facades\Storage;
 
 use function PHPUnit\Framework\isNull;
@@ -86,6 +89,7 @@ class FilmController extends Controller
         }
         return view("films.list", ["films" => $films_filtered, "title" => $title]);
     }
+<<<<<<< HEAD
     public function FilmsByYear($year = null)
     {
         $films_filtered = [];
@@ -128,4 +132,38 @@ class FilmController extends Controller
         return view("films.list", ["films" => $films_filtered, "title" => $title]);
     }
     
+=======
+    public function FilmsByYear(): array
+    {
+        // Obtener las películas usando readFilms
+        $films = FilmController::readFilms();
+
+        // Ordenar por año en orden descendente
+        usort($films, function ($a, $b) {
+            return $b['year'] <=> $a['year'];
+        });
+
+        return $films;
+    }
+    public function FilmsByGenre(): array
+    {
+        // Obtener las películas usando readFilms
+        $films = FilmController::readFilms();
+
+        // Ordenar por género en orden descendente (Z-A)
+        usort($films, function ($a, $b) {
+            return strcmp($b['genre'], $a['genre']);
+        });
+
+        return $films;
+    }
+    public function CountFilms(): int
+    {
+        // Obtener las películas usando readFilms
+        $films = FilmController::readFilms();
+
+        // Contar las películas
+        return count($films);
+    }
+>>>>>>> 40e166d2b8a87aeea9fb9d4a489979a5f9a86f81
 }

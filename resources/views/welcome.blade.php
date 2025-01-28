@@ -19,9 +19,13 @@
         <li><a href=/filmout/oldFilms>Pelis antiguas</a></li>
         <li><a href=/filmout/newFilms>Pelis nuevas</a></li>
         <li><a href=/filmout/films>Pelis</a></li>
+<<<<<<< HEAD
         <li><a href="/filmout/films/year/1994">Peliculas por año</a></li>
         <li><a href="/filmout/films/genre/drama">Peliculas por genre</a></li>
 
+=======
+        <li><a href="/filmout/films/">Pelis por año</a></li>
+>>>>>>> 40e166d2b8a87aeea9fb9d4a489979a5f9a86f81
     </ul>
     <!-- Add Bootstrap JS and Popper.js (required for Bootstrap) -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
