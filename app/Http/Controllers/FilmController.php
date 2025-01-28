@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Support\Facades\Storage;
 
 class FilmController extends Controller
@@ -9,7 +10,8 @@ class FilmController extends Controller
     /**
      * Read films from storage
      */
-    public static function readFilms(): array {
+    public static function readFilms(): array
+    {
         $films = Storage::json('/public/films.json');
         return $films;
     }
@@ -18,16 +20,16 @@ class FilmController extends Controller
      * if year is not infomed 2000 year will be used as criteria
      */
     public function listOldFilms($year = null)
-    {        
+    {
         $old_films = [];
         if (is_null($year))
-        $year = 2000;
-    
-        $title = "Listado de Pelis Antiguas (Antes de $year)";    
+            $year = 2000;
+
+        $title = "Listado de Pelis Antiguas (Antes de $year)";
         $films = FilmController::readFilms();
 
         foreach ($films as $film) {
-        //foreach ($this->datasource as $film) {
+            //foreach ($this->datasource as $film) {
             if ($film['year'] < $year)
                 $old_films[] = $film;
         }
@@ -68,27 +70,49 @@ class FilmController extends Controller
 
         //list based on year or genre informed
         foreach ($films as $film) {
-            if ((!is_null($year) && is_null($genre)) && $film['year'] == $year){
+            if ((!is_null($year) && is_null($genre)) && $film['year'] == $year) {
                 $title = "Listado de todas las pelis filtrado x año";
                 $films_filtered[] = $film;
-            }else if((is_null($year) && !is_null($genre)) && strtolower($film['genre']) == strtolower($genre)){
+            } else if ((is_null($year) && !is_null($genre)) && strtolower($film['genre']) == strtolower($genre)) {
                 $title = "Listado de todas las pelis filtrado x categoria";
                 $films_filtered[] = $film;
-            }else if(!is_null($year) && !is_null($genre) && strtolower($film['genre']) == strtolower($genre) && $film['year'] == $year){
+            } else if (!is_null($year) && !is_null($genre) && strtolower($film['genre']) == strtolower($genre) && $film['year'] == $year) {
                 $title = "Listado de todas las pelis filtrado x categoria y año";
                 $films_filtered[] = $film;
             }
         }
         return view("films.list", ["films" => $films_filtered, "title" => $title]);
     }
-    public function FilmsByYear($films_filtered ): array{
-        $films_filtered=[];
+    public function FilmsByYear(): array
+    {
+        // Obtener las películas usando readFilms
+        $films = FilmController::readFilms();
 
-        return $films_filtered;
+        // Ordenar por año en orden descendente
+        usort($films, function ($a, $b) {
+            return $b['year'] <=> $a['year'];
+        });
+
+        return $films;
     }
-public function FilmsByGenre($films_filtered):array{
-    $films_filtered=[];
-    return $films_filtered;
-}
-    
+    public function FilmsByGenre(): array
+    {
+        // Obtener las películas usando readFilms
+        $films = FilmController::readFilms();
+
+        // Ordenar por género en orden descendente (Z-A)
+        usort($films, function ($a, $b) {
+            return strcmp($b['genre'], $a['genre']);
+        });
+
+        return $films;
+    }
+    public function CountFilms(): int
+    {
+        // Obtener las películas usando readFilms
+        $films = FilmController::readFilms();
+
+        // Contar las películas
+        return count($films);
+    }
 }
