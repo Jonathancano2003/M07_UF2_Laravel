@@ -26,8 +26,10 @@ Route::middleware('year')->group(function () {
         Route::get('newFilms/{year?}', [FilmController::class, "listNewFilms"])->name('newFilms');
         Route::get('films', [FilmController::class, "listFilms"])->name('listFilms');
         Route::get('films/year/{year}', [FilmController::class, "filmsByYear"])->name("filmsByYear");
-
-
         Route::get('films/genre/{genre}', [FilmController::class, "filmsByGenre"])->name('filmsByGenre');
+
+        Route::middleware(['validate.url'])->group(function () {
+            Route::post('/create-film', [FilmController::class, 'createFilm'])->name('createFilm');
+        });
     });
 });

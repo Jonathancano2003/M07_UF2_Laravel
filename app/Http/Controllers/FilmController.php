@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Request;
 
 use function PHPUnit\Framework\isNull;
 
@@ -32,7 +33,7 @@ class FilmController extends Controller
         $films = FilmController::readFilms();
 
         foreach ($films as $film) {
-            //foreach ($this->datasource as $film) {
+
             if ($film['year'] < $year)
                 $old_films[] = $film;
         }
@@ -67,11 +68,11 @@ class FilmController extends Controller
         $title = "Listado de todas las pelis";
         $films = FilmController::readFilms();
 
-        //if year and genre are null
+
         if (is_null($year) && is_null($genre))
             return view('films.list', ["films" => $films, "title" => $title]);
 
-        //list based on year or genre informed
+
         foreach ($films as $film) {
             if ((!is_null($year) && is_null($genre)) && $film['year'] == $year) {
                 $title = "Listado de todas las pelis filtrado x año";
@@ -88,10 +89,10 @@ class FilmController extends Controller
     }
     public function FilmsByYear(): array
     {
-        // Obtener las películas usando readFilms
+
         $films = FilmController::readFilms();
 
-        // Ordenar por año en orden descendente
+
         usort($films, function ($a, $b) {
             return $b['year'] <=> $a['year'];
         });
@@ -100,10 +101,8 @@ class FilmController extends Controller
     }
     public function FilmsByGenre(): array
     {
-        // Obtener las películas usando readFilms
         $films = FilmController::readFilms();
 
-        // Ordenar por género en orden descendente (Z-A)
         usort($films, function ($a, $b) {
             return strcmp($b['genre'], $a['genre']);
         });
@@ -112,10 +111,45 @@ class FilmController extends Controller
     }
     public function CountFilms(): int
     {
-        // Obtener las películas usando readFilms
         $films = FilmController::readFilms();
 
-        // Contar las películas
         return count($films);
+    }
+    public function isFilm(array $films, string $name): bool
+    {
+        foreach ($films as $film) {
+            if (strtolower($film['name']) === strtolower($name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function createFilm(Request $request)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'year' => 'required|integer|min:1800|max:' . date('Y'),
+            'genre' => 'required|string|max:255',
+            'country' => 'required|string|max:255',
+            'duration' => 'required|integer|min:1',
+            'img_url' => 'nullable|url',
+        ]);
+
+        $films = self::readFilms();
+
+        if ($this->isFilm($films, $validatedData['name'])) {
+            return redirect()->back()->with('status', 'Error, la película ya existe.');
+        }
+
+        $films[] = $validatedData;
+
+        $status = Storage::put('/public/films.json', json_encode($films, JSON_PRETTY_PRINT));
+
+        if ($status) {
+            return redirect()->route('listFilms')->with('status', 'Película añadida correctamente.');
+        } else {
+            return redirect()->back()->with('status', 'Error al guardar la película.');
+        }
     }
 }

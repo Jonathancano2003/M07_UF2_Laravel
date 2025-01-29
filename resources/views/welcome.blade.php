@@ -6,26 +6,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movies List</title>
 
-    <!-- Add Bootstrap CSS link -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 
-    <!-- Include any additional stylesheets or scripts here -->
 </head>
 
 <body class="container">
+    <h1 >Añadir peliculas</h1>
+    @if (!empty($status))
+        <p style="color: red;">{{ $status }}</p>
+    @endif
+    <form action="{{ route('createFilm') }}" method="POST">
+        {{ csrf_field() }}
 
+        <label for="nombre">Nombre</label>
+        <input type="text" name="name" />
+
+        <label for="year">Año</label>
+        <input type="number" name="year" />
+
+        <label for="genre">Género</label>
+        <input type="text" name="genre" />
+
+        <label for="country">País</label>
+        <input type="text" name="country" />
+
+        <label for="duration">Duración</label>
+        <input type="number" name="duration" />
+
+        <label for="img_url">URL de Imagen</label>
+        <input type="text" name="img_url" />
+
+        <button type="submit">Guardar</button>
+    </form>
     <h1 class="mt-4">Lista de Peliculas</h1>
     <ul>
         <li><a href=/filmout/oldFilms>Pelis antiguas</a></li>
         <li><a href=/filmout/newFilms>Pelis nuevas</a></li>
         <li><a href=/filmout/films>Pelis</a></li>
-<<<<<<< HEAD
         <li><a href="/filmout/films/year/1994">Peliculas por año</a></li>
         <li><a href="/filmout/films/genre/drama">Peliculas por genre</a></li>
 
-=======
-        <li><a href="/filmout/films/">Pelis por año</a></li>
->>>>>>> 40e166d2b8a87aeea9fb9d4a489979a5f9a86f81
+        
     </ul>
     <!-- Add Bootstrap JS and Popper.js (required for Bootstrap) -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
