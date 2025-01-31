@@ -27,7 +27,7 @@ Route::middleware('year')->group(function () {
         Route::get('films', [FilmController::class, "listFilms"])->name('listFilms');
         Route::get('films/year/{year}', [FilmController::class, "filmsByYear"])->name("filmsByYear");
         Route::get('films/genre/{genre}', [FilmController::class, "filmsByGenre"])->name('filmsByGenre');
-
+        Route::get('films/count', [FilmController::class, "countFilms"])->name('countFilms');
         Route::middleware(['validate.url'])->group(function () {
             Route::post('/create-film', [FilmController::class, 'createFilm'])->name('createFilm');
         });

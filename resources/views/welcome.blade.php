@@ -1,10 +1,13 @@
+@extends('layouts.principal')
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movies List</title>
+    @section('titulo',"Bienvenido a la página de películas")
+    
+    
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 
@@ -45,6 +48,7 @@
         <li><a href=/filmout/films>Pelis</a></li>
         <li><a href="/filmout/films/year/1994">Peliculas por año</a></li>
         <li><a href="/filmout/films/genre/drama">Peliculas por genre</a></li>
+        <li><a href="/filmout/films/count">Contador de peliculas</a></li>
 
         
     </ul>
