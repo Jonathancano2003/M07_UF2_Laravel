@@ -7,18 +7,16 @@ use Illuminate\Support\Facades\Storage;
 
 class FilmController extends Controller
 {
-    /**
-     * Read films from storage
-     */
+
+
     public static function readFilms(): array
     {
         $films = Storage::json('/public/films.json');
         return $films;
     }
 
-    /**
-     * List films older than input year 
-     */
+
+
     public function listOldFilms($year = null)
     {
         if (is_null($year)) {
@@ -32,9 +30,8 @@ class FilmController extends Controller
         return view('films.list', ["films" => $old_films, "title" => $title]);
     }
 
-    /**
-     * List films younger than input year
-     */
+
+
     public function listNewFilms($year = null)
     {
         if (is_null($year)) {
@@ -48,9 +45,7 @@ class FilmController extends Controller
         return view('films.list', ["films" => $new_films, "title" => $title]);
     }
 
-    /**
-     * Lista TODAS las películas o filtra por año o género.
-     */
+
     public function listFilms($year = null, $genre = null)
     {
         $films = self::readFilms();
@@ -76,12 +71,8 @@ class FilmController extends Controller
         return view("films.list", ["films" => $films_filtered, "title" => $title]);
     }
 
-    /**
-     * Lista las películas ordenadas por año.
-     */
-    /**
-     * Lista las películas ordenadas por año.
-     */
+
+
     public function FilmsByYear()
     {
         $films = self::readFilms();
@@ -93,9 +84,8 @@ class FilmController extends Controller
         return view('films.list', ["films" => $films, "title" => $title]);
     }
 
-    /**
-     * Lista las películas ordenadas por género.
-     */
+
+
     public function FilmsByGenre()
     {
         $films = self::readFilms();
@@ -108,9 +98,7 @@ class FilmController extends Controller
     }
 
 
-    /**
-     * Muestra el número total de películas.
-     */
+
     public function CountFilms()
     {
         $films = self::readFilms();
@@ -120,9 +108,7 @@ class FilmController extends Controller
         echo "<p>Hay un total de <strong>$count</strong> películas en la base de datos.</p>";
     }
 
-    /**
-     * Verifica si una película está en la lista y lo muestra en pantalla.
-     */
+
     public function isFilm(Request $request)
     {
         $films = self::readFilms();
@@ -141,9 +127,8 @@ class FilmController extends Controller
             "<p><strong>$name</strong> no se encuentra en la base de datos.</p>";
     }
 
-    /**
-     * Agrega una nueva película al JSON.
-     */
+
+
     public function createFilm(Request $request)
     {
         $validatedData = $request->validate([
@@ -159,7 +144,7 @@ class FilmController extends Controller
 
         foreach ($films as $film) {
             if (strtolower($film['name']) === strtolower($validatedData['name'])) {
-                return redirect()->back()->with('status', 'Error, la película ya existe.');
+                return redirect()->route('listFilms')->withErrors(['error' => 'Error, la película ya existe.']);
             }
         }
 
@@ -167,9 +152,9 @@ class FilmController extends Controller
         $status = Storage::put('/public/films.json', json_encode($films, JSON_PRETTY_PRINT));
 
         if ($status) {
-            return redirect()->route('listFilms')->with('status', 'Película añadida correctamente.');
+            return redirect()->route('listFilms')->with('success', 'Película añadida correctamente.');
         } else {
-            return redirect()->back()->with('status', 'Error al guardar la película.');
+            return redirect()->route('listFilms')->withErrors(['error' => 'Error al guardar la película.']);
         }
     }
 }

@@ -39,7 +39,6 @@
         "country": "Espa\u00f1a",
         "duration": "137"
     },
-    
     {
         "name": "titanics",
         "year": "2003",
@@ -47,5 +46,21 @@
         "country": "estados unidos",
         "duration": "233",
         "img_url": "https:\/\/upload.wikimedia.org\/wikipedia\/commons\/f\/fd\/RMS_Titanic_3.jpg"
+    },
+    {
+        "name": "Interestelar",
+        "year": "2018",
+        "genre": "Ciencia ficcion",
+        "country": "USA",
+        "duration": "232",
+        "img_url": "https:\/\/m.media-amazon.com\/images\/M\/MV5BYzdjMDAxZGItMjI2My00ODA1LTlkNzItOWFjMDU5ZDJlYWY3XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg"
+    },
+    {
+        "name": "El lobo de wall street",
+        "year": "2017",
+        "genre": "Accion",
+        "country": "Usa",
+        "duration": "123",
+        "img_url": "https:\/\/m.media-amazon.com\/images\/I\/91-4id2EDJL.jpg"
     }
 ]
