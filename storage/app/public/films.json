@@ -39,7 +39,6 @@
         "country": "Espa\u00f1a",
         "duration": "137"
     },
-    
     {
         "name": "titanics",
         "year": "2003",
@@ -47,5 +46,13 @@
         "country": "estados unidos",
         "duration": "233",
         "img_url": "https:\/\/upload.wikimedia.org\/wikipedia\/commons\/f\/fd\/RMS_Titanic_3.jpg"
+    },
+    {
+        "name": "fa",
+        "year": "2020",
+        "genre": "Drama",
+        "country": "espa\u00f1a",
+        "duration": "142",
+        "img_url": "https:\/\/viajes.nationalgeographic.com.es\/a\/todo-que-hay-que-ver-primer-viaje-a-madeira_20228"
     }
 ]
