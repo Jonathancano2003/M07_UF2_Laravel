@@ -14,7 +14,6 @@
             </div>
         @endif
 
-  
         @if (session('success'))
             <div class="alert alert-success text-center">
                 {{ session('success') }}
@@ -41,14 +40,19 @@
                     <tbody>
                         @foreach($films as $film)
                             <tr>
-                                <td>{{ $film['name'] }}</td>
-                                <td>{{ $film['year'] }}</td>
-                                <td>{{ $film['genre'] }}</td>
+                                <td>{{ is_array($film) ? $film['name'] : $film->name }}</td>
+                                <td>{{ is_array($film) ? $film['year'] : $film->year }}</td>
+                                <td>{{ is_array($film) ? $film['genre'] : $film->genre }}</td>
                                 <td>
-                                    <img src="{{ $film['img_url'] }}" class="img-thumbnail" style="width: 100px; height: 120px;" alt="Imagen de {{ $film['name'] }}">
+                                    @php
+                                        $imgUrl = is_array($film) ? ($film['img_url'] ?? null) : ($film->img_url ?? null);
+                                    @endphp
+                                    @if ($imgUrl)
+                                        <img src="{{ $imgUrl }}" class="img-thumbnail" style="width: 100px; height: 120px;" alt="Imagen de {{ is_array($film) ? $film['name'] : $film->name }}">
+                                    @endif
                                 </td>
-                                <td>{{ $film['country'] }}</td>
-                                <td>{{ $film['duration'] }} minutos</td>
+                                <td>{{ is_array($film) ? $film['country'] : $film->country }}</td>
+                                <td>{{ is_array($film) ? $film['duration'] : $film->duration }} minutos</td>
                             </tr>
                         @endforeach
                     </tbody>

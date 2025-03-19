@@ -62,5 +62,21 @@
         "country": "Usa",
         "duration": "123",
         "img_url": "https:\/\/m.media-amazon.com\/images\/I\/91-4id2EDJL.jpg"
+    },
+    {
+        "name": "TITANIC",
+        "year": "1994",
+        "genre": "DRAMA",
+        "country": "USA",
+        "duration": "112",
+        "img_url": "https:\/\/pics.filmaffinity.com\/Titanic-321994924-large.jpg"
+    },
+    {
+        "name": "shrek",
+        "year": "2023",
+        "genre": "infantil",
+        "country": "espa\u00f1a",
+        "duration": "1234",
+        "img_url": "https:\/\/pics.filmaffinity.com\/shrek-903764423-mmed.jpg"
     }
 ]
