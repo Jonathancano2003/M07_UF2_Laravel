@@ -48,14 +48,6 @@
         "img_url": "https:\/\/upload.wikimedia.org\/wikipedia\/commons\/f\/fd\/RMS_Titanic_3.jpg"
     },
     {
-<<<<<<< HEAD
-        "name": "fa",
-        "year": "2020",
-        "genre": "Drama",
-        "country": "espa\u00f1a",
-        "duration": "142",
-        "img_url": "https:\/\/viajes.nationalgeographic.com.es\/a\/todo-que-hay-que-ver-primer-viaje-a-madeira_20228"
-=======
         "name": "Interestelar",
         "year": "2018",
         "genre": "Ciencia ficcion",
@@ -70,6 +62,5 @@
         "country": "Usa",
         "duration": "123",
         "img_url": "https:\/\/m.media-amazon.com\/images\/I\/91-4id2EDJL.jpg"
->>>>>>> 9f8c1fc8502874d77e6ec688f10ee9ca4314ec2c
     }
 ]

@@ -4,30 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< HEAD
-    <title>Titulo - @yield('titulo')
-    <link rel="stylesheet" href="{{ asset('styles.css') }}">
-
-    </title>
-</head>
-
-<body>
-    @section('header')
-    <h1>Header</h1>
-    <img src="{{asset('header.jpg')}}" alt="">
-
-    @show
-    <hr>
-    <div class="container">
-        @yield('content')
-    </div>
-    <hr>
- 
-    @section('footer')
-    <h1>PIE DE PAGINA </h1>
-   <img src="{{asset('footer.jpg')}}" alt="">
-    @show
-=======
     <title>@yield('titulo') - Página de Películas</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -106,7 +82,6 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
->>>>>>> 9f8c1fc8502874d77e6ec688f10ee9ca4314ec2c
 </body>
 
 </html>
