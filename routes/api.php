@@ -19,5 +19,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('destroy/{id}', [ActorController::class, "destroy"])->name('destroy');
-
+Route::get('showfilms/{id}', [ActorController::class, "showFilms"])->name('showFilms');
 

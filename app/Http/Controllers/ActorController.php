@@ -44,4 +44,25 @@ return json_encode(['action' => 'delete', 'status' => $status ? true : false]);
 
 
 }
+public function showFilms($id)
+{
+    $actor = DB::table('actors')->where('id', $id)->first();
+    
+    if (!$actor) {
+        return response()->json(['error' => 'Actor no encontrado'], 404);
+    }
+
+    $films = DB::table('films')
+        ->join('films_actors', 'films.id', '=', 'films_actors.film_id')
+        ->where('films_actors.actor_id', $id)
+        ->select('films.*') 
+        ->get();
+
+    return response()->json([
+        'actor' => $actor->name,
+        'films' => $films
+    ]);
+}
+
+
 }
