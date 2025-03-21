@@ -36,5 +36,12 @@ class ActorController extends Controller
     return view('actors.list', compact('actors', 'title', 'year'));
 }
 
+public function destroy($id)
+{
+    $status = DB::table('actors')->where('id', $id)->delete();
 
+return json_encode(['action' => 'delete', 'status' => $status ? true : false]);
+
+
+}
 }
