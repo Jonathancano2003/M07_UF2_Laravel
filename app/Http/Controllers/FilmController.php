@@ -112,13 +112,40 @@ class FilmController extends Controller
             'img_url' => 'nullable|url|max:255',
         ]);
     
-        $existsInDB = DB::table('films')->where('name', $validatedData['name'])->exists();
-        if ($existsInDB) {
-            return redirect()->route('listFilms')->withErrors(['error' => 'Error, la película ya existe en la base de datos.']);
+        $modo = env('CREAR_PELICULA', 'DB'); // DB, JSON
+    
+        if ($modo === 'DB') {
+            $exists = DB::table('films')->where('name', $validatedData['name'])->exists();
+    
+            if ($exists) {
+                return redirect()->route('listFilms')->withErrors(['error' => 'Error, la película ya existe en la base de datos.']);
+            }
+    
+            DB::table('films')->insert($validatedData);
+            return redirect()->route('listFilms')->with('success', 'Película añadida correctamente en la base de datos.');
         }
     
-        DB::table('films')->insert($validatedData);
+        if ($modo === 'JSON') {
+            $films = Storage::exists('/public/films.json') ? Storage::json('/public/films.json') : [];
     
-        return redirect()->route('listFilms')->with('success', 'Película añadida correctamente en la base de datos.');
+            foreach ($films as $film) {
+                if (strcasecmp($film['name'], $validatedData['name']) === 0) {
+                    return redirect()->route('listFilms')->withErrors(['error' => 'Error, la película ya existe en el JSON.']);
+                }
+            }
+    
+            $films[] = $validatedData;
+            $status = Storage::put('/public/films.json', json_encode($films, JSON_PRETTY_PRINT));
+    
+            if ($status) {
+                return redirect()->route('listFilms')->with('success', 'Película añadida correctamente en el JSON.');
+            } else {
+                return redirect()->route('listFilms')->withErrors(['error' => 'Error al guardar la película en JSON.']);
+            }
+        }
+    
+        return redirect()->route('listFilms')->withErrors(['error' => 'Modo de guardado no válido.']);
     }
+    
+
 }
