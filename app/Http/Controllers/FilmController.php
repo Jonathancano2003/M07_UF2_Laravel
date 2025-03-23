@@ -80,26 +80,11 @@ class FilmController extends Controller
 
     public function countFilms()
     {
-        $films = self::readFilms();
-        $count = count($films);
-        return view('films.count', compact('count'));
+        $count = DB::table('films')->count();
+        $title = "Cantidad de Peliculas";
+        return view('films.count', compact('count', 'title'));
     }
 
-    public function isFilm(Request $request)
-    {
-        $films = self::readFilms();
-        $name = $request->input('name');
-        $exists = false;
-
-        foreach ($films as $film) {
-            if (strcasecmp($film['name'], $name) === 0) {
-                $exists = true;
-                break;
-            }
-        }
-
-        return view('films.exists', compact('name', 'exists'));
-    }
 
     public function createFilm(Request $request)
     {
