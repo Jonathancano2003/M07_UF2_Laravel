@@ -19,29 +19,32 @@ class ActorController extends Controller
         $title = "Cantidad de Actores";
         return view('actors.count', compact('count', 'title'));
     }
-    public function listActorsByDecade($year = null)
-{
-    if (is_null($year)) {
-        return redirect()->route('listActorsByDecade', ['year' => 2000]); // Año por defecto
+    public function listActorsByDecade(Request $request)
+    {
+        $year = $request->input('year');
+
+        if (is_null($year)) {
+
+            $actors = collect();
+            $title = "Selecciona una década para ver actores";
+        } else {
+            $startYear = floor($year / 10) * 10;
+            $endYear = $startYear + 9;
+
+            $actors = DB::table('actors')
+                ->whereBetween(DB::raw('YEAR(birthdate)'), [$startYear, $endYear])
+                ->get();
+
+            $title = "Actores nacidos entre $startYear y $endYear";
+        }
+
+        return view('actors.list', compact('actors', 'title', 'year'));
     }
 
-    $startYear = floor($year / 10) * 10;
-    $endYear = $startYear + 9;
+    public function destroy($id)
+    {
+        $status = DB::table('actors')->where('id', $id)->delete();
 
-    $actors = DB::table('actors')
-        ->whereBetween(DB::raw('YEAR(birthdate)'), [$startYear, $endYear])
-        ->get();
-
-    $title = "Actores nacidos entre $startYear y $endYear";
-    return view('actors.list', compact('actors', 'title', 'year'));
-}
-
-public function destroy($id)
-{
-    $status = DB::table('actors')->where('id', $id)->delete();
-
-return json_encode(['action' => 'delete', 'status' => $status ? true : false]);
-
-
-}
+        return json_encode(['action' => 'delete', 'status' => $status ? true : false]);
+    }
 }
