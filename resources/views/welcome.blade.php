@@ -63,7 +63,7 @@
     </ul>
 
     <h2 class="text-center mb-4">Filtrar Actores por Década</h2>
-    <form action="{{ route('listActorsByDecade', ['year' => request('year', 2000)]) }}" method="GET" class="mb-4">
+    <form action="{{ route('listActorsByDecade') }}" method="GET" class="mb-4">
         <label for="decade">Selecciona una década:</label>
         <select name="year" id="decade" class="form-control">
             <option value="">Seleccionar...</option>

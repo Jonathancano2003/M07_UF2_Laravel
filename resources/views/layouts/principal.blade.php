@@ -47,7 +47,7 @@
 
  
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
-        <a class="navbar-brand" href="#">Peliculas</a>
+        <a class="navbar-brand" href="/">Peliculas</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -58,6 +58,9 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/filmout/films">Películas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/actors/list">Actores</a>
                 </li>
             </ul>
         </div>
