@@ -78,5 +78,13 @@
         "country": "espa\u00f1a",
         "duration": "1234",
         "img_url": "https:\/\/pics.filmaffinity.com\/shrek-903764423-mmed.jpg"
+    },
+    {
+        "name": "Minecraft",
+        "year": "2023",
+        "genre": "Infantil",
+        "country": "Usa",
+        "duration": "212",
+        "img_url": "https:\/\/pics.filmaffinity.com\/a_minecraft_movie-227832687-mmed.jpg"
     }
 ]
