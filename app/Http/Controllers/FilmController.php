@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Film;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class FilmController extends Controller
@@ -14,18 +14,14 @@ class FilmController extends Controller
             ? Storage::json('/public/films.json') 
             : [];
 
-        $filmsFromDB = DB::table('films')->get()->map(function ($film) {
-            return (array) $film;
-        })->toArray();
+        $filmsFromDB = Film::all()->map(fn($film) => $film->toArray())->toArray();
 
         return array_merge($filmsFromJson, $filmsFromDB);
     }
 
     public function listOldFilms($year = null)
     {
-        if (is_null($year)) {
-            $year = 2000;
-        }
+        $year ??= 2000;
 
         $title = "Listado de Pelis Antiguas (Antes de $year)";
         $films = self::readFilms();
@@ -36,9 +32,7 @@ class FilmController extends Controller
 
     public function listNewFilms($year = null)
     {
-        if (is_null($year)) {
-            $year = 2000;
-        }
+        $year ??= 2000;
 
         $title = "Listado de Pelis Nuevas (Después de $year)";
         $films = self::readFilms();
@@ -80,11 +74,10 @@ class FilmController extends Controller
 
     public function countFilms()
     {
-        $count = DB::table('films')->count();
+        $count = Film::count();
         $title = "Cantidad de Peliculas";
         return view('films.count', compact('count', 'title'));
     }
-
 
     public function createFilm(Request $request)
     {
@@ -96,41 +89,39 @@ class FilmController extends Controller
             'duration' => 'required|integer|min:1',
             'img_url' => 'nullable|url|max:255',
         ]);
-    
-        $modo = env('CREAR_PELICULA', 'DB'); // DB, JSON
-    
+
+        $modo = env('CREAR_PELICULA', 'DB');
+
         if ($modo === 'DB') {
-            $exists = DB::table('films')->where('name', $validatedData['name'])->exists();
-    
+            $exists = Film::where('name', $validatedData['name'])->exists();
+
             if ($exists) {
                 return redirect()->route('listFilms')->withErrors(['error' => 'Error, la película ya existe en la base de datos.']);
             }
-    
-            DB::table('films')->insert($validatedData);
+
+            Film::create($validatedData);
             return redirect()->route('listFilms')->with('success', 'Película añadida correctamente en la base de datos.');
         }
-    
+
         if ($modo === 'JSON') {
             $films = Storage::exists('/public/films.json') ? Storage::json('/public/films.json') : [];
-    
+
             foreach ($films as $film) {
                 if (strcasecmp($film['name'], $validatedData['name']) === 0) {
                     return redirect()->route('listFilms')->withErrors(['error' => 'Error, la película ya existe en el JSON.']);
                 }
             }
-    
+
             $films[] = $validatedData;
             $status = Storage::put('/public/films.json', json_encode($films, JSON_PRETTY_PRINT));
-    
+
             if ($status) {
                 return redirect()->route('listFilms')->with('success', 'Película añadida correctamente en el JSON.');
             } else {
                 return redirect()->route('listFilms')->withErrors(['error' => 'Error al guardar la película en JSON.']);
             }
         }
-    
+
         return redirect()->route('listFilms')->withErrors(['error' => 'Modo de guardado no válido.']);
     }
-    
-
 }
