@@ -1,17 +1,17 @@
 <?php
-
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    public function run(): void
+    public function run()
     {
+       
         $this->call([
-            ActorFakerSeeder::class,
             FilmFakerSeeder::class,
-            FilmActorSeeder::class,
+            ActorFakerSeeder::class,
+            FilmActorSeeder::class,  
         ]);
     }
 }

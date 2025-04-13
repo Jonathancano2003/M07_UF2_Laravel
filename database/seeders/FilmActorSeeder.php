@@ -1,28 +1,23 @@
 <?php
-
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use App\Models\Film;
+use App\Models\Actor;
 
 class FilmActorSeeder extends Seeder
 {
     public function run()
     {
-        $films = DB::table('films')->pluck('id')->toArray();
-        $actors = DB::table('actors')->pluck('id')->toArray();
+      
+        $films = Film::all();
+        $actors = Actor::all();
 
-        foreach ($films as $filmId) {
-            $randomActors = array_rand($actors, rand(1, 3));
-
-            foreach ((array) $randomActors as $actorIndex) {
-                DB::table('films_actors')->insert([
-                    'film_id' => $filmId,
-                    'actor_id' => $actors[$actorIndex],
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
-            }
-        }
+      
+        $films->each(function ($film) use ($actors) {
+            $film->actors()->attach(
+                $actors->random(rand(1, 3))->pluck('id')->toArray()
+            );
+        });
     }
 }
