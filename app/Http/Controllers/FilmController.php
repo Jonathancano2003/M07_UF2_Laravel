@@ -2,26 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Film;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Film;  // Asegúrate de que esta línea esté correcta
 
 class FilmController extends Controller
 {
     public static function readFilms(): array
     {
-        $filmsFromJson = Storage::exists('/public/films.json') 
-            ? Storage::json('/public/films.json') 
+        $filmsFromJson = Storage::exists('/public/films.json')
+            ? Storage::json('/public/films.json')
             : [];
 
-        $filmsFromDB = Film::all()->map(fn($film) => $film->toArray())->toArray();
+        $filmsFromDB = DB::table('films')->get()->map(function ($film) {
+            return (array) $film;
+        })->toArray();
 
         return array_merge($filmsFromJson, $filmsFromDB);
     }
 
     public function listOldFilms($year = null)
     {
-        $year ??= 2000;
+        if (is_null($year)) {
+            $year = 2000;
+        }
 
         $title = "Listado de Pelis Antiguas (Antes de $year)";
         $films = self::readFilms();
@@ -32,7 +37,9 @@ class FilmController extends Controller
 
     public function listNewFilms($year = null)
     {
-        $year ??= 2000;
+        if (is_null($year)) {
+            $year = 2000;
+        }
 
         $title = "Listado de Pelis Nuevas (Después de $year)";
         $films = self::readFilms();
@@ -48,7 +55,7 @@ class FilmController extends Controller
         if ($year || $genre) {
             $films = array_filter($films, function ($film) use ($year, $genre) {
                 return (is_null($year) || $film['year'] == $year) &&
-                       (is_null($genre) || strcasecmp($film['genre'], $genre) == 0);
+                    (is_null($genre) || strcasecmp($film['genre'], $genre) == 0);
             });
         }
 
@@ -74,7 +81,7 @@ class FilmController extends Controller
 
     public function countFilms()
     {
-        $count = Film::count();
+        $count = DB::table('films')->count();
         $title = "Cantidad de Peliculas";
         return view('films.count', compact('count', 'title'));
     }
@@ -90,16 +97,16 @@ class FilmController extends Controller
             'img_url' => 'nullable|url|max:255',
         ]);
 
-        $modo = env('CREAR_PELICULA', 'DB');
+        $modo = env('CREAR_PELICULA', 'DB'); // DB, JSON
 
         if ($modo === 'DB') {
-            $exists = Film::where('name', $validatedData['name'])->exists();
+            $exists = DB::table('films')->where('name', $validatedData['name'])->exists();
 
             if ($exists) {
                 return redirect()->route('listFilms')->withErrors(['error' => 'Error, la película ya existe en la base de datos.']);
             }
 
-            Film::create($validatedData);
+            DB::table('films')->insert($validatedData);
             return redirect()->route('listFilms')->with('success', 'Película añadida correctamente en la base de datos.');
         }
 
@@ -123,5 +130,15 @@ class FilmController extends Controller
         }
 
         return redirect()->route('listFilms')->withErrors(['error' => 'Modo de guardado no válido.']);
+    }
+
+    // API: Listar películas con actores
+    public function apiListFilms()
+    {
+        // Obtiene todas las películas con sus actores asociados
+        $films = Film::with('actors')->get();
+
+        // Devuelve la respuesta en formato JSON
+        return response()->json($films);
     }
 }

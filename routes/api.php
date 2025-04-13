@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ActorController;
+use App\Http\Controllers\FilmController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -21,3 +22,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('destroy/{id}', [ActorController::class, "destroy"])->name('destroy');
 Route::get('showfilms/{id}', [ActorController::class, "showFilms"])->name('showFilms');
 
+Route::get('/films', [FilmController::class, 'apiListFilms']);
