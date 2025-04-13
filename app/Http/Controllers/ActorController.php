@@ -70,4 +70,9 @@ class ActorController extends Controller
             'films' => $actor->films
         ]);
     }
+    public function apiListActors()
+    {
+        $actors = Actor::with('films')->get();
+        return response()->json($actors);
+    }
 }

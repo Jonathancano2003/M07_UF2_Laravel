@@ -23,3 +23,4 @@ Route::get('destroy/{id}', [ActorController::class, "destroy"])->name('destroy')
 Route::get('showfilms/{id}', [ActorController::class, "showFilms"])->name('showFilms');
 
 Route::get('/films', [FilmController::class, 'apiListFilms']);
+Route::get('/actors', [ActorController::class, 'apiListActors']);
