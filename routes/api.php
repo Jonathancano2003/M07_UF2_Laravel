@@ -6,7 +6,7 @@ use App\Http\Controllers\ActorController;
 use App\Http\Controllers\FilmController;
 /*
 |--------------------------------------------------------------------------
-| API Routes
+| API Routess
 |--------------------------------------------------------------------------
 |
 | Here is where you can register API routes for your application. These
