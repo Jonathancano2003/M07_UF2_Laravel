@@ -5,13 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-
+use App\Models\Film;
 class FilmController extends Controller
 {
     public static function readFilms(): array
     {
-        $filmsFromJson = Storage::exists('/public/films.json') 
-            ? Storage::json('/public/films.json') 
+        $filmsFromJson = Storage::exists('/public/films.json')
+            ? Storage::json('/public/films.json')
             : [];
 
         $filmsFromDB = DB::table('films')->get()->map(function ($film) {
@@ -54,7 +54,7 @@ class FilmController extends Controller
         if ($year || $genre) {
             $films = array_filter($films, function ($film) use ($year, $genre) {
                 return (is_null($year) || $film['year'] == $year) &&
-                       (is_null($genre) || strcasecmp($film['genre'], $genre) == 0);
+                    (is_null($genre) || strcasecmp($film['genre'], $genre) == 0);
             });
         }
 
@@ -96,41 +96,47 @@ class FilmController extends Controller
             'duration' => 'required|integer|min:1',
             'img_url' => 'nullable|url|max:255',
         ]);
-    
+
         $modo = env('CREAR_PELICULA', 'DB'); // DB, JSON
-    
+
         if ($modo === 'DB') {
             $exists = DB::table('films')->where('name', $validatedData['name'])->exists();
-    
+
             if ($exists) {
                 return redirect()->route('listFilms')->withErrors(['error' => 'Error, la película ya existe en la base de datos.']);
             }
-    
+
             DB::table('films')->insert($validatedData);
             return redirect()->route('listFilms')->with('success', 'Película añadida correctamente en la base de datos.');
         }
-    
+
         if ($modo === 'JSON') {
             $films = Storage::exists('/public/films.json') ? Storage::json('/public/films.json') : [];
-    
+
             foreach ($films as $film) {
                 if (strcasecmp($film['name'], $validatedData['name']) === 0) {
                     return redirect()->route('listFilms')->withErrors(['error' => 'Error, la película ya existe en el JSON.']);
                 }
             }
-    
+
             $films[] = $validatedData;
             $status = Storage::put('/public/films.json', json_encode($films, JSON_PRETTY_PRINT));
-    
+
             if ($status) {
                 return redirect()->route('listFilms')->with('success', 'Película añadida correctamente en el JSON.');
             } else {
                 return redirect()->route('listFilms')->withErrors(['error' => 'Error al guardar la película en JSON.']);
             }
         }
-    
+
         return redirect()->route('listFilms')->withErrors(['error' => 'Modo de guardado no válido.']);
     }
-    
+    public function apiListFilms()
+    {
+        // Obtiene todas las películas con sus actores asociados
+        $films = Film::with('actors')->get();
 
+        // Devuelve la respuesta en formato JSON
+        return response()->json($films);
+    }
 }
